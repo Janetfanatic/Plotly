@@ -17,7 +17,9 @@ init();
 
 function optionChanged(newSample) {
   buildMetadata(newSample);
-  buildCharts(newSample);
+  buildBarcharts(newSample);
+  buildBubblecharts(newSample);
+  buildGaguecharts(newSample);
 }
 
 optionChanged(940)
@@ -43,7 +45,7 @@ function buildMetadata(sample) {
 }
 
 // Retrieve Data for bar Graph
-function buildCharts(sample) {
+function buildBarcharts(sample) {
   d3.json("samples.json").then((data) => {
     var samples = data.samples;
     var samplesArray = samples.filter(sampleObj => sampleObj.id == sample);
@@ -94,22 +96,18 @@ function buildCharts(sample) {
 }
 
 
-
-
-// 
-
 //  Bubble Chart
 // / Retrieve Data for Bubble Chart
-function buildCharts(sample) {
+function buildBubblecharts(sample) {
   d3.json("samples.json").then((data) => {
     var samples = data.samples;
     var samplesArray = samples.filter(sampleObj => sampleObj.id == sample);
     var result = samplesArray[0];
 
-    var culture_values = result.sample_values.slice(0,10).reverse();
-    var culture_ids = result.otu_ids.slice(0,10).reverse();
-    culture_ids = culture_ids.map(id => `OTU ${id}`);
-    var culture_labels = result.otu_labels.slice(0,10).reverse();
+    var culture_values = result.sample_values;
+    var culture_ids = result.otu_ids;
+    // culture_ids = culture_ids.map(id => `OTU ${id}`);
+    var culture_labels = result.otu_labels;
   
     
 
@@ -142,7 +140,7 @@ function buildCharts(sample) {
       title: 'Bubble Chart Hover Text',
       showlegend: false,
       height: 600,
-      width: 600
+      width: 1200
     };
     
      // Render the plot to the div tag with id 
