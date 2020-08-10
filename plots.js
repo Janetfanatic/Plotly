@@ -19,7 +19,7 @@ function optionChanged(newSample) {
   buildMetadata(newSample);
   buildBarcharts(newSample);
   buildBubblecharts(newSample);
-  buildGaguecharts(newSample);
+  buildGaugecharts(newSample);
 }
 
 optionChanged(940)
@@ -72,7 +72,10 @@ function buildBarcharts(sample) {
       text: culture_labels,
       name: "Top 10 Bacterial Species",
       type: "bar",
-      orientation: "h"
+      orientation: "h",
+      marker: {
+        color: 'indianred',
+      }
     };
     
     // data
@@ -80,13 +83,14 @@ function buildBarcharts(sample) {
     
     // Apply the group bar mode to the layout
     var layout = {
-      title: "Top 10 Bacterial Species",
+      title: "Top 10 Bacterial Species", font: {color: "maroon", size: 14},
       margin: {
         l: 100,
         r: 100,
         t: 100,
         b: 100
-      }
+      },
+      paper_bgcolor: "linen",
     };
     
     // Render the plot to the div tag with id 
@@ -120,8 +124,6 @@ function buildBubblecharts(sample) {
   
     
     // Trace1 for the Bubble Chart
-
-
     
     var trace1 = {
       x: culture_ids,
@@ -129,7 +131,8 @@ function buildBubblecharts(sample) {
       text: culture_labels,
       mode: 'markers',
       marker: {
-        color: culture_ids ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
+        color: culture_ids,
+        colorscale: 'YlOrRd',
         size: culture_values
       }
     };
@@ -137,7 +140,8 @@ function buildBubblecharts(sample) {
     var data = [trace1];
     
     var layout = {
-      title: 'Bubble Chart Hover Text',
+      title: { text: "Belly Button Bacteria", font: {color: "maroon", family: "Arial", size:24}},
+      paper_bgcolor: "linen",
       showlegend: false,
       height: 600,
       width: 1200
@@ -151,31 +155,56 @@ function buildBubblecharts(sample) {
 
 
 // Gague Chart
+function buildGaugecharts(sample) {
+  d3.json("samples.json").then((data) => {
+    var metadata = data.metadata;
+    var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
+    var result = resultArray[0];
+    var PANEL = d3.select("#sample-metadata");
 
+    var washFrequency = result.wfreq
+    console.log(washFrequency)
 
+    d3.select("#gauge")
+  var data = [
+  {
+    domain: { x: [0, washFrequency], y: [0, washFrequency] },
+    value: washFrequency,
+    title: { text: "Belly Button Washing Frequency <br> Scrubs per Week", font: {color: "maroon", size:24 }},
+    type: "indicator",
+    mode: "gauge+number",
+    delta: { reference: 10 },
+    gauge: {
+      axis: { range: [null, 10] },
+      bar: { color: "black" },
+      steps: [
+        { range: [0, 1], color: "lemonchiffon" },
+        { range: [1, 2], color: "papayawhip" },
+        { range: [2, 3], color: "moccasin" },
+        { range: [3, 4], color: "peachpuff" },
+        { range: [4, 5], color: "lightsalmon" },
+        { range: [5, 6], color: "salmon"} ,
+        { range: [6, 7], color: "coral" },
+        { range: [7, 8], color: "tomato" },
+        { range: [8, 9], color: "indianred" },
+        { range: [9, 10], color: "orangered" },        
+      ],
+      threshold: {
+        line: { color: "red", width: 4 },
+        thickness: 0.75,
+        value: 10
+      }
+    }
+  }
+];
 
-// var data = [
-//   {
-//     domain: { x: [0, 1], y: [0, 1] },
-//     value: 450,
-//     title: { text: "Speed" },
-//     type: "indicator",
-//     mode: "gauge+number+delta",
-//     delta: { reference: 380 },
-//     gauge: {
-//       axis: { range: [null, 500] },
-//       steps: [
-//         { range: [0, 250], color: "lightgray" },
-//         { range: [250, 400], color: "gray" }
-//       ],
-//       threshold: {
-//         line: { color: "red", width: 4 },
-//         thickness: 0.75,
-//         value: 490
-//       }
-//     }
-//   }
-// ];
+var layout = { 
+  width: 600, 
+  height: 450, 
+  margin: { t: 0, b: 0 },
+  paper_bgcolor: "linen",}
+  ;
+Plotly.newPlot('gauge', data, layout);
 
-// var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
-// Plotly.newPlot('myDiv', data, layout);
+});
+}
