@@ -141,6 +141,7 @@ function buildBubblecharts(sample) {
     
     var layout = {
       title: { text: "Belly Button Bacteria", font: {color: "maroon", family: "Arial", size:24}},
+      xaxis: { title: { text: 'OTU ID', font: { family: 'Arial', size: 18, color: 'maroon'}}, },
       paper_bgcolor: "linen",
       showlegend: false,
       height: 600,
